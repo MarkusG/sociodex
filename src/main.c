@@ -11,13 +11,12 @@ int main(void) {
 	curs_set(0);
 	keypad(stdscr, TRUE);
 
-	PGconn *conn = PQconnectdb("dbname=rolodex");
+	PGconn *conn = PQconnectdb("dbname=mockadex");
 	if (!conn) {
 		endwin();
 		return 1;
 	}
 	
-	getch();
 	MENU *main_menu = init_main_menu(conn);
 
 	post_menu(main_menu);
