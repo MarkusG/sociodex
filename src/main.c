@@ -12,8 +12,9 @@ int main(void) {
 	keypad(stdscr, TRUE);
 
 	PGconn *conn = PQconnectdb("dbname=mockadex");
-	if (!conn) {
+	if (PQstatus(conn) != CONNECTION_OK) {
 		endwin();
+		printf("could not connect to database\n");
 		return 1;
 	}
 
