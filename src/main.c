@@ -3,6 +3,7 @@
 #include <libpq-fe.h>
 
 #include "menu/sociodex-menu.h"
+#include "view/sociodex-view.h"
 
 int main(void) {
 	initscr();
@@ -29,6 +30,8 @@ int main(void) {
 	post_menu(main_menu);
 
 	int c;
+	// TODO keep track of how deep we are in the program to know whether
+	// to quit or not; possibly use the ncurses panels library
 	while ((c = getch()) != 'q') {
 		switch (c) {
 			case KEY_UP:
@@ -46,6 +49,15 @@ int main(void) {
 			case KEY_RIGHT:
 			case 'l':
 				menu_driver(main_menu, REQ_RIGHT_ITEM);
+				break;
+			case '\n':
+			case '\r': ;
+				ITEM *person = current_item(main_menu);
+				char *uid = (char*)item_userptr(person);
+				unpost_menu(main_menu);
+				WINDOW *summary = person_summary_view(conn, stdscr, uid);
+				box(summary, 0, 0);
+				wrefresh(summary);
 				break;
 		}
 	}
