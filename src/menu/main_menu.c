@@ -6,7 +6,8 @@
 MENU *init_main_menu(PGconn *conn) {
 	PGresult *query_result = PQexec(conn,
 			"SELECT first_name, last_name, gender, phone, met_through "
-			"FROM person;");
+			"FROM person "
+			"ORDER BY last_name;");
 	switch (PQresultStatus(query_result)) {
 		case PGRES_TUPLES_OK:
 			// intended behavior
