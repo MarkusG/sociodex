@@ -5,7 +5,7 @@
 
 MENU *init_main_menu(PGconn *conn) {
 	PGresult *query_result = PQexec(conn,
-			"SELECT first_name, last_name, gender, phone, met_through "
+			"SELECT uid, first_name, last_name, gender, phone, met_through "
 			"FROM person "
 			"ORDER BY last_name;");
 	switch (PQresultStatus(query_result)) {
@@ -24,7 +24,7 @@ MENU *init_main_menu(PGconn *conn) {
 	}
 
 	int n_rows = PQntuples(query_result);
-	int n_fields = PQnfields(query_result);
+	int n_fields = PQnfields(query_result) - 1; // we don't want to show uid
 
 	int *max_len = (int*)calloc(n_fields, sizeof(int));
 	for (int i = 0; i < n_rows; i++) {
@@ -43,12 +43,13 @@ MENU *init_main_menu(PGconn *conn) {
 	for (i = 0; i < n_rows; i++) {
 		*row = '\0';
 		for (int j = 0; j < n_fields; j++) {
-			sprintf(padded_value, "%-*s", max_len[j], PQgetvalue(query_result, i, j));
+			sprintf(padded_value, "%-*s", max_len[j + 1], PQgetvalue(query_result, i, j + 1));
 			strcat(row, padded_value);
 			if (j != n_fields - 1)
 				strcat(row, " | ");
 		}
 		items[i] = new_item(strdup(row), NULL);
+		set_item_userptr(items[i], PQgetvalue(query_result, i, 0));
 	}
 	items[i] = (ITEM*)NULL;
 
