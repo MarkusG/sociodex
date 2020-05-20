@@ -18,6 +18,8 @@ int main(void) {
 	}
 	
 	MENU *main_menu = init_main_menu(conn);
+	menu_opts_off(main_menu, O_SHOWDESC);
+	set_menu_mark(main_menu, NULL);
 
 	post_menu(main_menu);
 

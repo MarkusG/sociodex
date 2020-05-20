@@ -52,7 +52,5 @@ MENU *init_main_menu(PGconn *conn) {
 	items[i] = (ITEM*)NULL;
 
 	MENU *menu = new_menu(items);
-	menu_opts_off(menu, O_SHOWDESC);
-	set_menu_mark(menu, NULL);
 	return menu;
 }
