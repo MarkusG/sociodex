@@ -1,5 +1,5 @@
-#ifndef __MENUS_H__
-#define __MENUS_H__
+#ifndef __SOCIODEX_MENU_H__
+#define __SOCIODEX_MENU_H__
 #include <menu.h>
 #include <libpq-fe.h>
 

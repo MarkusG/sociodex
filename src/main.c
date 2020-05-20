@@ -2,7 +2,7 @@
 
 #include <libpq-fe.h>
 
-#include "menu/menus.h"
+#include "menu/sociodex-menu.h"
 
 int main(void) {
 	initscr();

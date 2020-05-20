@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "menus.h"
+#include "sociodex-menu.h"
 
 MENU *init_main_menu(PGconn *conn) {
 	PGresult *query_result = PQexec(conn,
