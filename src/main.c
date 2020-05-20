@@ -16,10 +16,14 @@ int main(void) {
 		endwin();
 		return 1;
 	}
+
+	int term_width, term_height;
+	getmaxyx(stdscr, term_height, term_width);
 	
 	MENU *main_menu = init_main_menu(conn);
 	menu_opts_off(main_menu, O_SHOWDESC);
 	set_menu_mark(main_menu, NULL);
+	set_menu_format(main_menu, term_height, 1);
 
 	post_menu(main_menu);
 
