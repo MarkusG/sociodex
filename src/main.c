@@ -4,6 +4,7 @@
 
 #include "menu/sociodex-menu.h"
 #include "view/sociodex-view.h"
+#include "sociodex-panelstack.h"
 
 int main(void) {
 	initscr();
@@ -11,6 +12,8 @@ int main(void) {
 	noecho();
 	curs_set(0);
 	keypad(stdscr, TRUE);
+
+	init_panel_stack();
 
 	int term_width, term_height;
 	getmaxyx(stdscr, term_height, term_width);
@@ -30,8 +33,6 @@ int main(void) {
 	post_menu(main_menu);
 
 	int c;
-	// TODO keep track of how deep we are in the program to know whether
-	// to quit or not; possibly use the ncurses panels library
 	while ((c = getch()) != 'q') {
 		switch (c) {
 			case KEY_UP:
@@ -59,11 +60,42 @@ int main(void) {
 				ITEM *person = current_item(main_menu);
 				char *uid = (char*)item_userptr(person);
 				unpost_menu(main_menu);
+				wrefresh(stdscr);
 				WINDOW *summary = person_summary_view(conn, stdscr, uid);
 				box(summary, 0, 0);
+				if (push_panel(new_panel(summary))) {
+					endwin();
+					fprintf(stderr, "could not push panel onto stack\n");
+					return 1;
+				}
+				update_panels();
 				wrefresh(summary);
 				break;
 			}
+			case KEY_BACKSPACE: {
+				if (peek_panel()) {
+					// we're not in the main menu
+					PANEL *current = pop_panel();
+					PANEL *below = panel_below(current);
+					WINDOW *below_win;
+					if (!below) {
+						// we're above the main menu
+						below_win = stdscr;
+					} else {
+						below_win = panel_window(below);
+					}
+					werase(panel_window(current));
+					delwin(panel_window(current));
+					del_panel(current);
+					update_panels();
+					doupdate();
+					if (below_win == stdscr) {
+						post_menu(main_menu);
+						wrefresh(below_win);
+					}
+				}
+			}
+
 		}
 	}
 
