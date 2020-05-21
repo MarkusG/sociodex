@@ -35,23 +35,27 @@ int main(void) {
 	while ((c = getch()) != 'q') {
 		switch (c) {
 			case KEY_UP:
-			case 'k':
+			case 'k': {
 				menu_driver(main_menu, REQ_UP_ITEM);
 				break;
+			}
 			case KEY_DOWN:
-			case 'j':
+			case 'j': {
 				menu_driver(main_menu, REQ_DOWN_ITEM);
 				break;
+			}
 			case KEY_LEFT:
-			case 'h':
+			case 'h': {
 				menu_driver(main_menu, REQ_LEFT_ITEM);
 				break;
+			}
 			case KEY_RIGHT:
-			case 'l':
+			case 'l': {
 				menu_driver(main_menu, REQ_RIGHT_ITEM);
 				break;
+			}
 			case '\n':
-			case '\r': ;
+			case '\r': {
 				ITEM *person = current_item(main_menu);
 				char *uid = (char*)item_userptr(person);
 				unpost_menu(main_menu);
@@ -59,6 +63,7 @@ int main(void) {
 				box(summary, 0, 0);
 				wrefresh(summary);
 				break;
+			}
 		}
 	}
 
