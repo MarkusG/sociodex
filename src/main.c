@@ -57,6 +57,10 @@ int main(void) {
 			}
 			case '\n':
 			case '\r': {
+				// check to see if we're already in a summary window
+				// to avoid adding duplicate summary windows to the stack
+				if (peek_panel().type == PANEL_PERSON_SUMMARY)
+					break;
 				ITEM *person = current_item(main_menu);
 				char *uid = (char*)item_userptr(person);
 				unpost_menu(main_menu);
