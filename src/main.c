@@ -12,15 +12,15 @@ int main(void) {
 	curs_set(0);
 	keypad(stdscr, TRUE);
 
+	int term_width, term_height;
+	getmaxyx(stdscr, term_height, term_width);
+
 	PGconn *conn = PQconnectdb("dbname=mockadex");
 	if (PQstatus(conn) != CONNECTION_OK) {
 		endwin();
 		printf("could not connect to database\n");
 		return 1;
 	}
-
-	int term_width, term_height;
-	getmaxyx(stdscr, term_height, term_width);
 	
 	MENU *main_menu = init_main_menu(conn);
 	menu_opts_off(main_menu, O_SHOWDESC);
