@@ -63,7 +63,7 @@ int main(void) {
 				wrefresh(stdscr);
 				WINDOW *summary = person_summary_view(conn, stdscr, uid);
 				box(summary, 0, 0);
-				if (push_panel(new_panel(summary))) {
+				if (push_panel(new_panel(summary), PANEL_PERSON_SUMMARY)) {
 					endwin();
 					fprintf(stderr, "could not push panel onto stack\n");
 					return 1;
@@ -73,9 +73,9 @@ int main(void) {
 				break;
 			}
 			case KEY_BACKSPACE: {
-				if (peek_panel()) {
+				if (peek_panel().panel) {
 					// we're not in the main menu
-					PANEL *current = pop_panel();
+					PANEL *current = pop_panel().panel;
 					PANEL *below = panel_below(current);
 					WINDOW *below_win;
 					if (!below) {

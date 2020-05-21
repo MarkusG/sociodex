@@ -4,12 +4,14 @@
 
 #define PANEL_STACK_BUFSIZE 4
 
-static PANEL **stack;
+const sociodex_panel BLANK_PANEL = { .panel = NULL, .type = PANEL_BLANK };
+
+static sociodex_panel *stack;
 static int capacity = 0, n_panels = 0;
 
 int resize_stack(void) {
 	capacity += PANEL_STACK_BUFSIZE;
-	stack = (PANEL**)realloc(stack, capacity * sizeof(PANEL*));
+	stack = (sociodex_panel*)realloc(stack, capacity * sizeof(sociodex_panel));
 	if (!stack) {
 		perror("sociodex");
 		return 1;
@@ -19,7 +21,7 @@ int resize_stack(void) {
 
 int init_panel_stack(void) {
 	capacity = PANEL_STACK_BUFSIZE;
-	stack = (PANEL**)malloc(capacity * sizeof(PANEL*));
+	stack = (sociodex_panel*)malloc(capacity * sizeof(sociodex_panel));
 	if (!stack) {
 		perror("sociodex");
 		return 1;
@@ -28,7 +30,7 @@ int init_panel_stack(void) {
 	return 0;
 }
 
-int push_panel(PANEL *panel) {
+int push_panel(PANEL *panel, panel_type type) {
 	if (capacity == 0) {
 		return 1;
 	}
@@ -38,18 +40,19 @@ int push_panel(PANEL *panel) {
 			return 1;
 		}
 	}
-	stack[n_panels++] = panel;
+	sociodex_panel s_panel = { .panel = panel, .type = type };
+	stack[n_panels++] = s_panel;
 	return 0;
 }
 
-PANEL *pop_panel(void) {
+sociodex_panel pop_panel(void) {
 	if (n_panels == 0)
-		return NULL;
+		return BLANK_PANEL;
 	return stack[--n_panels];
 }
 
-PANEL *peek_panel(void) {
+sociodex_panel peek_panel(void) {
 	if (n_panels == 0)
-		return NULL;
+		return BLANK_PANEL;
 	return stack[n_panels - 1];
 }
