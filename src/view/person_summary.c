@@ -91,8 +91,7 @@ WINDOW *person_summary_view(PGconn *conn,
 				PQgetvalue(address_result, i, 1),
 				PQgetvalue(address_result, i, 2),
 				PQgetvalue(address_result, i, 3),
-				PQgetvalue(address_result, i, 4),
-				PQgetvalue(address_result, i, 5));
+				PQgetvalue(address_result, i, 4));
 	}
 
 	return window;
