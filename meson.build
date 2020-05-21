@@ -25,6 +25,7 @@ version_conf.set(
 deps = [
   dependency('ncurses'),
   dependency('menu'),
+  dependency('panel'),
   dependency('libpq'),
 ]
 
@@ -34,8 +35,16 @@ headers = []
 subdir('src')
 # subdir('doc')
 
-executable(meson.project_name(),
+exe = executable(meson.project_name(),
   sources + headers,
   dependencies: deps,
   install: true
 )
+
+# this is just a quick hack to let us link our unit tests
+lib = shared_library('lib' + meson.project_name(),
+  sources + headers,
+  dependencies: deps,
+)
+
+subdir('tests')
