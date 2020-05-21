@@ -5,7 +5,7 @@
 #define PANEL_STACK_BUFSIZE 4
 
 static PANEL **stack;
-static int capacity, n_panels;
+static int capacity = 0, n_panels = 0;
 
 int resize_stack(void) {
 	capacity += PANEL_STACK_BUFSIZE;
@@ -29,6 +29,9 @@ int init_panel_stack(void) {
 }
 
 int push_panel(PANEL *panel) {
+	if (capacity == 0) {
+		return 1;
+	}
 	if (n_panels == capacity) {
 		if (resize_stack()) {
 			perror("sociodex");
