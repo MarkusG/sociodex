@@ -1,7 +1,50 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../sociodex-delegate.h"
 #include "sociodex-menu.h"
+
+MENU *main_menu = NULL;
+
+status delegate(int c, state state, void *ptr) {
+	// initialize the main menu if it is not already initialized
+	// this should only run once, when the program starts
+	if (!main_menu) {
+		main_menu = init_main_menu(state.db_conn);
+		menu_opts_off(main_menu, O_SHOWDESC);
+		set_menu_mark(main_menu, NULL);
+		set_menu_format(main_menu, state.term_height, 1);
+
+		post_menu(main_menu);
+		return CONTINUE;
+	}
+
+	ptr = NULL;
+	switch (c) {
+		case 'q':
+			return QUIT;
+		case KEY_UP:
+		case 'k':
+			menu_driver(main_menu, REQ_UP_ITEM);
+			return CONTINUE;
+		case KEY_DOWN:
+		case 'j':
+			menu_driver(main_menu, REQ_DOWN_ITEM);
+			return CONTINUE;
+		case KEY_LEFT:
+		case 'h':
+			menu_driver(main_menu, REQ_LEFT_ITEM);
+			return CONTINUE;
+		case KEY_RIGHT:
+		case 'l':
+			menu_driver(main_menu, REQ_RIGHT_ITEM);
+			return CONTINUE;
+		default:
+			return CONTINUE;
+	}
+}
+
+key_delegate main_menu_delegate = &delegate;
 
 MENU *init_main_menu(PGconn *conn) {
 	PGresult *query_result = PQexec(conn,
