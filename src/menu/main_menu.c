@@ -5,6 +5,7 @@
 #include "sociodex-menu.h"
 
 MENU *main_menu = NULL;
+char cur_item_uid[38] = { '\0' };
 
 static status delegate(int c, state state, void **ptr, void **uid) {
 	// initialize the main menu if it is not already initialized
@@ -14,6 +15,15 @@ static status delegate(int c, state state, void **ptr, void **uid) {
 		menu_opts_off(main_menu, O_SHOWDESC);
 		set_menu_mark(main_menu, NULL);
 		set_menu_format(main_menu, state.term_height, 1);
+		if (cur_item_uid[0] != '\0') {
+			ITEM **items = menu_items(main_menu);
+			for (int i = 0; i < item_count(main_menu); i++) {
+				if (strcmp(cur_item_uid, (char*)item_userptr(items[i])) == 0) {
+					set_current_item(main_menu, items[i]);
+					break;
+				}
+			}
+		}
 
 		post_menu(main_menu);
 		return CONTINUE;
@@ -43,6 +53,7 @@ static status delegate(int c, state state, void **ptr, void **uid) {
 			ITEM *person = current_item(main_menu);
 			*uid = item_userptr(person);
 			*ptr = (void*)person_summary_delegate;
+			strcpy(cur_item_uid, (char*)item_userptr(current_item(main_menu)));
 			free_menu(main_menu);
 			main_menu = NULL;
 			return CHANGE_DELEGATE;
