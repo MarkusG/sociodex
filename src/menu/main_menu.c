@@ -51,7 +51,7 @@ static status delegate(int c, state state, void **ptr, void **uid) {
 		case '\n':
 		case '\r': {
 			ITEM *person = current_item(main_menu);
-			*uid = item_userptr(person);
+			*uid = strdup((char*)item_userptr(person));
 			*ptr = (void*)person_summary_delegate;
 			strcpy(cur_item_uid, (char*)item_userptr(current_item(main_menu)));
 			free_menu_items(main_menu);

@@ -1,12 +1,14 @@
+#include <stdlib.h>
+
 #include "../sociodex-delegate.h"
 #include "sociodex-view.h"
 
 WINDOW *window = NULL;
 
 static status delegate(int c, state state, void **ptr, void **uid) {
-	printw("%s", (char*)*uid);
 	if (!window) {
 		window = person_summary_view(state.db_conn, stdscr, (char*)*uid);
+		free(*uid);
 		box(window, 0, 0);
 		if (push_panel(new_panel(window), PANEL_PERSON_SUMMARY)) {
 			*ptr = (void*)"could not push panel onto stack";
