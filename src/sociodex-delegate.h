@@ -18,4 +18,6 @@ typedef struct state {
 } state;
 
 typedef status (*key_delegate)(int, state, void*);
+
+extern key_delegate main_menu_delegate;
 #endif
