@@ -54,7 +54,10 @@ static status delegate(int c, state state, void **ptr, void **uid) {
 			*uid = item_userptr(person);
 			*ptr = (void*)person_summary_delegate;
 			strcpy(cur_item_uid, (char*)item_userptr(current_item(main_menu)));
+			free_menu_items(main_menu);
+			free(menu_pattern(main_menu));
 			free_menu(main_menu);
+			free(main_menu);
 			main_menu = NULL;
 			return CHANGE_DELEGATE;
 		}
@@ -112,9 +115,17 @@ MENU *init_main_menu(PGconn *conn) {
 				strcat(row, " | ");
 		}
 		items[i] = new_item(strdup(row), NULL);
-		set_item_userptr(items[i], PQgetvalue(query_result, i, 0));
+		set_item_userptr(items[i], strdup(PQgetvalue(query_result, i, 0)));
 	}
 	items[i] = (ITEM*)NULL;
+
+	free(max_len);
+	free(row);
+	free(padded_value);
+
+	// we can free all of the query result's memory here because
+	// we duplicated everything
+	PQclear(query_result);
 
 	MENU *menu = new_menu(items);
 	return menu;

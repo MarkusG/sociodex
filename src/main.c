@@ -34,6 +34,7 @@ int main(void) {
 		switch (delegate(c, state, &ptr, &data)) {
 			case QUIT:
 				endwin();
+				PQfinish(conn);
 				return 0;
 			case CONTINUE:
 				break;
@@ -42,6 +43,7 @@ int main(void) {
 				continue;
 			case ERROR:
 				endwin();
+				PQfinish(conn);
 				fprintf(stderr, "sociodex: %s\n", (char*)ptr);
 				return 1;
 		}

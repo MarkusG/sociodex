@@ -4,6 +4,7 @@
 WINDOW *window = NULL;
 
 static status delegate(int c, state state, void **ptr, void **uid) {
+	printw("%s", (char*)*uid);
 	if (!window) {
 		window = person_summary_view(state.db_conn, stdscr, (char*)*uid);
 		box(window, 0, 0);
@@ -119,6 +120,8 @@ WINDOW *person_summary_view(PGconn *conn,
 	wprintw(writespace, "Met through: %s\n\n",
 			PQgetvalue(person_result, 0, field++));
 	wprintw(writespace, "Addresses:\n\n");
+
+	PQclear(person_result);
 	
 	for (int i = 0; i < PQntuples(address_result); i++) {
 		wprintw(writespace, "%s\n%s, %s, %s %s\n\n",
@@ -129,5 +132,6 @@ WINDOW *person_summary_view(PGconn *conn,
 				PQgetvalue(address_result, i, 4));
 	}
 
+	PQclear(address_result);
 	return window;
 }
