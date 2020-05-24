@@ -6,7 +6,7 @@
 
 MENU *main_menu = NULL;
 
-status delegate(int c, state state, void *ptr) {
+static status delegate(int c, state state, void **ptr, void **uid) {
 	// initialize the main menu if it is not already initialized
 	// this should only run once, when the program starts
 	if (!main_menu) {
@@ -19,7 +19,6 @@ status delegate(int c, state state, void *ptr) {
 		return CONTINUE;
 	}
 
-	ptr = NULL;
 	switch (c) {
 		case 'q':
 			return QUIT;
@@ -39,6 +38,15 @@ status delegate(int c, state state, void *ptr) {
 		case 'l':
 			menu_driver(main_menu, REQ_RIGHT_ITEM);
 			return CONTINUE;
+		case '\n':
+		case '\r': {
+			ITEM *person = current_item(main_menu);
+			*uid = item_userptr(person);
+			*ptr = (void*)person_summary_delegate;
+			free_menu(main_menu);
+			main_menu = NULL;
+			return CHANGE_DELEGATE;
+		}
 		default:
 			return CONTINUE;
 	}

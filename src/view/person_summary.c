@@ -1,4 +1,38 @@
+#include "../sociodex-delegate.h"
 #include "sociodex-view.h"
+
+WINDOW *window = NULL;
+
+static status delegate(int c, state state, void **ptr, void **uid) {
+	if (!window) {
+		window = person_summary_view(state.db_conn, stdscr, (char*)*uid);
+		box(window, 0, 0);
+		if (push_panel(new_panel(window), PANEL_PERSON_SUMMARY)) {
+			*ptr = (void*)"could not push panel onto stack";
+			return ERROR;
+		}
+		update_panels();
+		wrefresh(window);
+	}
+
+	switch (c) {
+		case 'q': {
+			PANEL *current = pop_panel().panel;
+			werase(panel_window(current));
+			delwin(panel_window(current));
+			del_panel(current);
+			update_panels();
+			doupdate();
+			window = NULL;
+			*ptr = (void*)main_menu_delegate;
+			return CHANGE_DELEGATE;
+		}
+		default:
+			return CONTINUE;
+	}
+}
+
+key_delegate person_summary_delegate = &delegate;
 
 WINDOW *person_summary_view(PGconn *conn,
 		WINDOW *parent_window,
@@ -68,6 +102,7 @@ WINDOW *person_summary_view(PGconn *conn,
 	int startx = (x - width) / 2;
 	WINDOW *window = derwin(parent_window, height, width, starty, startx);
 	WINDOW *writespace = derwin(window, height - 2, width - 4, 1, 2);
+	werase(window);
 	// this could be a loop but a stack of statements is probably better
 	// because we have to print a different pattern every time
 	int field = 0;

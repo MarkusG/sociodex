@@ -17,7 +17,8 @@ typedef struct state {
 	PGconn *db_conn;
 } state;
 
-typedef status (*key_delegate)(int, state, void*);
+typedef status (*key_delegate)(int, state, void**, void**);
 
 extern key_delegate main_menu_delegate;
+extern key_delegate person_summary_delegate;
 #endif

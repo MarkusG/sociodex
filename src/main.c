@@ -29,8 +29,9 @@ int main(void) {
 	int c = 0;
 	key_delegate delegate = main_menu_delegate;
 	void *ptr = NULL;
+	void *data = NULL;
 	while (true) {
-		switch (delegate(c, state, ptr)) {
+		switch (delegate(c, state, &ptr, &data)) {
 			case QUIT:
 				endwin();
 				return 0;
@@ -38,7 +39,7 @@ int main(void) {
 				break;
 			case CHANGE_DELEGATE:
 				delegate = (key_delegate)ptr;
-				break;
+				continue;
 			case ERROR:
 				endwin();
 				fprintf(stderr, "sociodex: %s\n", (char*)ptr);
