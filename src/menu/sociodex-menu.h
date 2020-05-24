@@ -4,4 +4,5 @@
 #include <libpq-fe.h>
 
 MENU *init_main_menu(PGconn *conn);
+int free_menu_items(const MENU*);
 #endif
