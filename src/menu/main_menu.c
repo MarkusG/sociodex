@@ -105,7 +105,8 @@ MENU *init_main_menu(PGconn *conn) {
 	for (i = 0; i < n_rows; i++) {
 		*row = '\0';
 		for (int j = 0; j < n_fields; j++) {
-			sprintf(padded_value, "%-*s", max_len[j + 1], PQgetvalue(query_result, i, j + 1));
+			sprintf(padded_value, "%-*s", max_len[j + 1],
+					PQgetvalue(query_result, i, j + 1));
 			strcat(row, padded_value);
 			if (j != n_fields - 1)
 				strcat(row, " | ");
