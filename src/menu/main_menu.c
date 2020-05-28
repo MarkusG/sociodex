@@ -1,8 +1,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../sociodex-delegate.h"
-#include "sociodex-menu.h"
+#include <menu.h>
+
+#include "../delegate.h"
+#include "menu-utils.h"
+
+MENU *init_main_menu(PGconn *conn);
 
 MENU *main_menu = NULL;
 char cur_item_uid[38] = { '\0' };

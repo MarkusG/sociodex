@@ -2,10 +2,8 @@
 
 #include <libpq-fe.h>
 
-#include "menu/sociodex-menu.h"
-#include "view/sociodex-view.h"
-#include "sociodex-panelstack.h"
-#include "sociodex-delegate.h"
+#include "panel-stack.h"
+#include "delegate.h"
 
 int main(void) {
 	initscr();

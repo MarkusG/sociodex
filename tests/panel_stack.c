@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "../src/sociodex-panelstack.h"
+#include "../src/panel-stack.h"
 
 int main(void) {
 	if (init_panel_stack())

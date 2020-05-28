@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-#include "sociodex-menu.h"
+#include "menu-utils.h"
 
 int free_menu_items(const MENU* menu) {
 	int result = 0;

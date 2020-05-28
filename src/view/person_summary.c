@@ -1,7 +1,9 @@
 #include <stdlib.h>
 
-#include "../sociodex-delegate.h"
-#include "sociodex-view.h"
+#include "../panel-stack.h"
+#include "../delegate.h"
+
+WINDOW *person_summary_view(PGconn*, WINDOW*, const char*);
 
 WINDOW *window = NULL;
 

@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-#include "sociodex-panelstack.h"
+#include "panel-stack.h"
 
 #define PANEL_STACK_BUFSIZE 4
 
