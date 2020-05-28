@@ -1,6 +1,7 @@
 #include <stdlib.h>
 
-#include "../panel-stack.h"
+#include <curses.h>
+
 #include "../delegate.h"
 
 WINDOW *person_summary_view(PGconn*, WINDOW*, const char*);
@@ -12,22 +13,13 @@ static status delegate(int c, state state, void **ptr, void **uid) {
 		window = person_summary_view(state.db_conn, stdscr, (char*)*uid);
 		free(*uid);
 		box(window, 0, 0);
-		if (push_panel(new_panel(window), PANEL_PERSON_SUMMARY)) {
-			*ptr = (void*)"could not push panel onto stack";
-			return ERROR;
-		}
-		update_panels();
 		wrefresh(window);
 	}
 
 	switch (c) {
 		case 'q': {
-			PANEL *current = pop_panel().panel;
-			werase(panel_window(current));
-			delwin(panel_window(current));
-			del_panel(current);
-			update_panels();
-			doupdate();
+			werase(window);
+			delwin(window);
 			window = NULL;
 			*ptr = (void*)main_menu_delegate;
 			return CHANGE_DELEGATE;

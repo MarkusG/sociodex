@@ -1,8 +1,8 @@
 #include <stdio.h>
 
+#include <curses.h>
 #include <libpq-fe.h>
 
-#include "panel-stack.h"
 #include "delegate.h"
 
 int main(void) {
@@ -11,8 +11,6 @@ int main(void) {
 	noecho();
 	curs_set(0);
 	keypad(stdscr, TRUE);
-
-	init_panel_stack();
 
 	PGconn *conn = PQconnectdb("dbname=mockadex");
 	if (PQstatus(conn) != CONNECTION_OK) {
