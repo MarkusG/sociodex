@@ -25,7 +25,6 @@ version_conf.set(
 deps = [
   dependency('ncurses'),
   dependency('menu'),
-  dependency('panel'),
   dependency('libpq'),
 ]
 
