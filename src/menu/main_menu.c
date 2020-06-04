@@ -105,7 +105,7 @@ MENU *init_main_menu(PGconn *conn) {
 		}
 	}
 
-	ITEM **items = (ITEM**)calloc(n_rows, sizeof(ITEM*));
+	ITEM **items = (ITEM**)calloc(n_rows + 1, sizeof(ITEM*));
 	char *row = (char*)malloc(128 * sizeof(char));
 	char *padded_value = (char*)malloc(64 * sizeof(char));
 	int i;
