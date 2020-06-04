@@ -93,7 +93,7 @@ MENU *init_main_menu(PGconn *conn) {
 	}
 
 	int n_rows = PQntuples(query_result);
-	int n_fields = PQnfields(query_result) - 1; // we don't want to show uid
+	int n_fields = PQnfields(query_result);
 
 	int *max_len = (int*)calloc(n_fields, sizeof(int));
 	for (int i = 0; i < n_rows; i++) {
@@ -111,9 +111,9 @@ MENU *init_main_menu(PGconn *conn) {
 	int i;
 	for (i = 0; i < n_rows; i++) {
 		*row = '\0';
-		for (int j = 0; j < n_fields; j++) {
-			sprintf(padded_value, "%-*s", max_len[j + 1],
-					PQgetvalue(query_result, i, j + 1));
+		for (int j = 1; j < n_fields; j++) {
+			sprintf(padded_value, "%-*s", max_len[j],
+					PQgetvalue(query_result, i, j));
 			strcat(row, padded_value);
 			if (j != n_fields - 1)
 				strcat(row, " | ");
